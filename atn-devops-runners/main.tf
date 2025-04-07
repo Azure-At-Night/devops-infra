@@ -39,7 +39,7 @@ resource "azurerm_federated_identity_credential" "id_fed_cred" {
   parent_id           = azurerm_user_assigned_identity.id.id
   audience            = ["api://AzureADTokenExchange"]
   issuer              = "https://token.actions.githubusercontent.com"
-  subject             = "repo:Azure-At-Night/devops-infra" # "repo:Azure-At-Night/bootstrap-runners:environment:aprove"
+  subject             = "repo:Azure-At-Night/devops-infra:ref:refs/heads/main" # "repo:Azure-At-Night/bootstrap-runners:environment:aprove"
 }
 
 resource "azurerm_role_assignment" "contributor" {
