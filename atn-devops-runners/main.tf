@@ -36,7 +36,7 @@ resource "azurerm_user_assigned_identity" "id" {
 resource "azurerm_federated_identity_credential" "id_fed_cred" {
   name                = "atn-devops-runners"
   resource_group_name = module.rg.name
-  parent_id           = azurerm_user_assigned_identity.id.principal_id
+  parent_id           = azurerm_user_assigned_identity.id.id
   audience            = ["api://AzureADTokenExchange"]
   issuer              = "https://token.actions.githubusercontent.com"
   subject             = "repo:Azure-At-Night/devops-infra:ref:refs/heads/main" # "repo:Azure-At-Night/bootstrap-runners:environment:aprove"
@@ -79,7 +79,7 @@ resource "github_actions_variable" "azure_subscription_id" {
 resource "github_actions_variable" "azure_client_id" {
   repository    = var.github_repository_name
   variable_name = "AZURE_CLIENT_ID"
-  value         = azurerm_user_assigned_identity.id.id
+  value         = azurerm_user_assigned_identity.id.principal_id
 }
 #endregion Github variables
 
