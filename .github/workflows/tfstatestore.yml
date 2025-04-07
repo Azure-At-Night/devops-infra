@@ -1,0 +1,26 @@
+name: Terraform State Store Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  az-cli-task:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Azure CLI
+        uses: azure/setup-azure-cli@v3
+
+      - name: Login to Azure
+        run: az login --identity
+
+      - name: Run Azure CLI command
+        run: |
+          az --version
+          # Add your Azure CLI commands here
