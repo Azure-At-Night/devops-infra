@@ -79,7 +79,7 @@ resource "github_actions_variable" "azure_subscription_id" {
 resource "github_actions_variable" "azure_client_id" {
   repository    = var.github_repository_name
   variable_name = "AZURE_CLIENT_ID"
-  value         = azurerm_user_assigned_identity.id.principal_id
+  value         = azurerm_user_assigned_identity.id.client_id
 }
 #endregion Github variables
 
