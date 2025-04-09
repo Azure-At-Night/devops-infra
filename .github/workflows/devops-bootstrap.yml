@@ -37,10 +37,34 @@ jobs:
           az bicep version
       
       - name: Bicep - Terraform state storage configuration
-        run: |
-          CURRENT_DATE=$(date +'%Y-%m-%dT%H-%M-%S')
-          TEMPLATE_FILE_PATH="/00-m-tfstatestore/bootstrap.bicep"
-          FULL_PATH="$GITHUB_WORKSPACE/$TEMPLATE_FILE_PATH"
-          LOCATION="centralus"
-          az deployment sub create --name "bootstrap-tfstorage-$CURRENT_DATE" --location $LOCATION --template-file $FULL_PATH --what-if
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            $templateFile = "/00-m-tfstatestore/bootstrap.bicep"
+            $templateFilePath = "$GITHUB_WORKSPACE/$templateFile"
+            $currentDate = (Get-Date -Format "yyyy-MM-ddTHH-mm-ss")
+            $deploymentLocation = "centralus"
+            $deploymentName = "bootstrap-tfstorage-$currentDate"
+            
+            if ($userInput -like "yes") {
+            Write-Output "Bicep deployment proposed changes."
+            } elseif ($userInput -like "no") {
+              Write-Output "Bicep deployment applying changes."
+            }
+
+      # - name: Bicep - Terraform state storage configuration
+      #   run: |
+      #     CURRENT_DATE=$(date +'%Y-%m-%dT%H-%M-%S')
+      #     TEMPLATE_FILE_PATH="/00-m-tfstatestore/bootstrap.bicep"
+      #     FULL_PATH="$GITHUB_WORKSPACE/$TEMPLATE_FILE_PATH"
+      #     LOCATION="centralus"
+      #     az deployment sub create --name "bootstrap-tfstorage-$CURRENT_DATE" --location $LOCATION --template-file $FULL_PATH --what-if
+      #     if ($userInput -like "yes") {
+      #     Write-Output "Bicep deployment proposed changes."  
+      #     az deployment sub create --name "bootstrap-tfstorage-$date" --location "germanywestcentral" --template-file $templateFilePath --what-if
+      #     } elseif ($userInput -like "no") {
+      #       Write-Output "Bicep deployment applying changes."
+      #       az deployment sub create --name "bootstrap-tfstorage-$date" --location "germanywestcentral" --template-file $templateFilePath
+      #     }
           
