@@ -47,11 +47,13 @@ jobs:
             $deploymentLocation = "centralus"
             $deploymentName = "bootstrap-tfstorage-$currentDate"
             $userInput = ${{ github.event.inputs.userInput }}
-            
-            if ($userInput -like "yes") {
+
+            if ($userInput) {
             Write-Output "Bicep deployment proposed changes."
-            } elseif ($userInput -like "no") {
+            } elseif (!$userInput) {
               Write-Output "Bicep deployment applying changes."
+            } else {
+              Write-Output "Invalid input: $userInput. Please enter 'true' or 'false'."
             }
 
       # - name: Bicep - Terraform state storage configuration
