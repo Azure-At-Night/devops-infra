@@ -41,8 +41,9 @@ jobs:
       
       - name: Bicep - Terraform state storage deployment and configuration
         run: |
-          Date=$(date +'%Y-%m-%dT%H-%M-%S')
-          TemplateFilePath="$(GITHUB_WORKSPACE)/00-m-tfstatestore/bootstrap.bicep"
-          Location="centralus"
-          az deployment sub create --name "bootstrap-tfstorage-$Date" --location $Location --template-file $TemplateFilePath --what-if
+          CURRENT_DATE=$(date +'%Y-%m-%dT%H-%M-%S')
+          TEMPLATE_FILE_PATH="/00-m-tfstatestore/bootstrap.bicep"
+          FULL_PATH="$GITHUB_WORKSPACE/$TEMPLATE_FILE_PATH"
+          LOCATION="centralus"
+          az deployment sub create --name "bootstrap-tfstorage-$CURRENT_DATE" --location $LOCATION --template-file $FULL_PATH --what-if
           
