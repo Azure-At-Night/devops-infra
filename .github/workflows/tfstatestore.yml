@@ -21,11 +21,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Bicep Installation
-        uses: azure/cli@v2
-        with:
-          azcliversion: "2.30.0"
-          inlineScript: |
-            export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-            az bicep install
-            az bicep version
+      # - name: Bicep Installation
+      #   uses: azure/cli@v2
+      #   with:
+      #     azcliversion: "2.30.0"
+      #     inlineScript: |
+      #       export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+      #       az bicep install
+      #       az bicep version
+      
+      - name: List Local Files
+        run: az --version
