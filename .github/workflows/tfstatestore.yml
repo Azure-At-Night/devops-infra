@@ -30,5 +30,8 @@ jobs:
       #       az bicep install
       #       az bicep version
       
-      - name: List Local Files
-        run: az --version
+      - name: Install Bicep
+        run: |
+          export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+          az bicep install
+          az bicep version
