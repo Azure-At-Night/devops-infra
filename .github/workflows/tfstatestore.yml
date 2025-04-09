@@ -26,11 +26,18 @@ jobs:
           export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
           az bicep install
           az bicep version
+
+      - name: Azure PowerShell script
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            Get-ChildItem
       
-      - name: Terraform State Storage Deployment
-        run: |
-          Date=$(date +'%Y-%m-%dT%H-%M-%S')
-          TemplateFilePath='./devops-infra/00-m-tfstatestore/bootstrap.bicep'
-          Location="centralus"
-          az deployment sub create --name "bootstrap-tfstorage-$Date" --location $Location --template-file $TemplateFilePath --what-if
+      # - name: Terraform State Storage Deployment
+      #   run: |
+      #     Date=$(date +'%Y-%m-%dT%H-%M-%S')
+      #     TemplateFilePath='./devops-infra/00-m-tfstatestore/bootstrap.bicep'
+      #     Location="centralus"
+      #     az deployment sub create --name "bootstrap-tfstorage-$Date" --location $Location --template-file $TemplateFilePath --what-if
           
