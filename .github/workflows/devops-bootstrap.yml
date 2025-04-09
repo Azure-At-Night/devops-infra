@@ -6,10 +6,10 @@ on:
         description: Bicep run with whatIf (no chages)
         required: true
         type: choice
-        default: yes
+        default: plan
         options:
-          - yes
-          - no
+          - plan
+          - apply
 permissions:
   id-token: write
   contents: read
@@ -48,12 +48,12 @@ jobs:
             $deploymentName = "bootstrap-tfstorage-$currentDate"
             $userInput = ${{ github.event.inputs.userInput }}
 
-            if ($userInput) {
+            if ($userInput -like "plan") {
             Write-Output "Bicep deployment proposed changes."
-            } elseif (!$userInput) {
+            } elseif ($userInput -like "apply") {
               Write-Output "Bicep deployment applying changes."
             } else {
-              Write-Output "Invalid input: $userInput. Please enter 'true' or 'false'."
+              Write-Output "Invalid input: $userInput. Please enter 'plan' or 'apply'."
             }
 
       # - name: Bicep - Terraform state storage configuration
