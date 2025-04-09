@@ -1,13 +1,22 @@
 name: Terraform State Management
 on:
   workflow_dispatch:
-
+    inputs:
+      userInput:
+        description: Bicep run with whatIf (no chages)
+        required: true
+        type: choice
+        default: yes
+        options:
+          - yes
+          - no
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  build-and-deploy:
+  bicep-deployment:
+    name: Bicep deployment
     runs-on: self-hosted
     steps:
       - name: Azure login
@@ -26,20 +35,8 @@ jobs:
           export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
           az bicep install
           az bicep version
-
-      - name: Azure PowerShell script
-        uses: azure/powershell@v2
-        with:
-          azPSVersion: "latest"
-          inlineScript: |
-            Get-ChildItem
       
-      - name: Current Directory
-        run: |
-          pwd
-          ls -l $GITHUB_WORKSPACE
-      
-      - name: Bicep - Terraform state storage deployment and configuration
+      - name: Bicep - Terraform state storage configuration
         run: |
           CURRENT_DATE=$(date +'%Y-%m-%dT%H-%M-%S')
           TEMPLATE_FILE_PATH="/00-m-tfstatestore/bootstrap.bicep"
