@@ -41,7 +41,7 @@ jobs:
         with:
           azPSVersion: "latest"
           inlineScript: |
-            $templateFile = "/00-m-tfstatestore/bootstrap.bicep"
+            $templateFile = "00-m-tfstatestore/bootstrap.bicep"
             $templateFilePath = "$GITHUB_WORKSPACE/$templateFile"
             $currentDate = (Get-Date -Format "yyyy-MM-ddTHH-mm-ss")
             $deploymentLocation = "centralus"
