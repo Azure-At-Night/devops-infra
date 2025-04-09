@@ -42,7 +42,7 @@ jobs:
           azPSVersion: "latest"
           inlineScript: |
             $templateFile = "00-m-tfstatestore/bootstrap.bicep"
-            $templateFilePath = "$GITHUB_WORKSPACE/$templateFile"
+            $templateFilePath = "$GITHUB_WORKSPACE$templateFile"
             $currentDate = (Get-Date -Format "yyyy-MM-ddTHH-mm-ss")
             $deploymentLocation = "centralus"
             $deploymentName = "bootstrap-tfstorage-$currentDate"
@@ -58,4 +58,5 @@ jobs:
             }
             else {
               Write-Output "Invalid input: $userInput. Please enter 'plan' or 'apply'."
+              exit 1
             }
