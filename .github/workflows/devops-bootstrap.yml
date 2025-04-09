@@ -46,6 +46,7 @@ jobs:
             $currentDate = (Get-Date -Format "yyyy-MM-ddTHH-mm-ss")
             $deploymentLocation = "centralus"
             $deploymentName = "bootstrap-tfstorage-$currentDate"
+            $userInput = ${{ github.event.inputs.userInput }}
             
             if ($userInput -like "yes") {
             Write-Output "Bicep deployment proposed changes."
