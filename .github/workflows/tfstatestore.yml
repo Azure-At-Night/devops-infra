@@ -24,7 +24,7 @@ jobs:
       - name: Bicep Installation
         uses: azure/cli@v2
         with:
-          azcliversion: ">= 2.30.0"
+          azcliversion: "2.30.0"
           inlineScript: |
             export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
             az bicep install
