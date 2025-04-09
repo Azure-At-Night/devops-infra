@@ -22,6 +22,10 @@ var varStorageAccounts = [
         name: 'atn-identities'
         publicAccess: 'None'
       }
+      {
+        name: '00-m-github'
+        publicAccess: 'None'
+      }
     ]
     roleAssignments: [
       {

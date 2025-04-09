@@ -5,7 +5,7 @@ variable "azure_tenant_id" {
 
 variable "azure_subscription_id" {
   type        = string
-  description = "Subscription ID where is storage account name for TF state."
+  description = "Subscription ID where resources are deployed."
 }
 
 variable "github_organization_name" {
@@ -27,6 +27,12 @@ variable "github_runners_personal_access_token" {
 
 variable "github_repository_name" {
   description = "Repository name."
-  type = string
-  sensitive = false
+  type        = string
+  sensitive   = false
+}
+
+variable "enable_telemetry" {
+  description = "Enable telemetry."
+  type        = bool
+  default     = false
 }
