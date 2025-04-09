@@ -26,6 +26,10 @@ var varStorageAccounts = [
         name: '00-m-github'
         publicAccess: 'None'
       }
+      {
+        name: 'new-container'
+        publicAccess: 'None'
+      }
     ]
     roleAssignments: [
       {
