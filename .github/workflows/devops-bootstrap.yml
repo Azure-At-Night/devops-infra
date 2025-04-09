@@ -49,25 +49,13 @@ jobs:
             $userInput = "${{ github.event.inputs.userInput }}"
 
             if ($userInput -like "plan") {
-            Write-Output "Bicep deployment proposed changes."
-            } elseif ($userInput -like "apply") {
+              Write-Output "Bicep deployment proposed changes."
+              az deployment sub create --name $deploymentName --location $deploymentLocation --template-file $templateFilePath --what-if
+            }
+            elseif ($userInput -like "apply") {
               Write-Output "Bicep deployment applying changes."
-            } else {
+              az deployment sub create --name $deploymentName --location $deploymentLocation --template-file $templateFilePath
+            }
+            else {
               Write-Output "Invalid input: $userInput. Please enter 'plan' or 'apply'."
             }
-
-      # - name: Bicep - Terraform state storage configuration
-      #   run: |
-      #     CURRENT_DATE=$(date +'%Y-%m-%dT%H-%M-%S')
-      #     TEMPLATE_FILE_PATH="/00-m-tfstatestore/bootstrap.bicep"
-      #     FULL_PATH="$GITHUB_WORKSPACE/$TEMPLATE_FILE_PATH"
-      #     LOCATION="centralus"
-      #     az deployment sub create --name "bootstrap-tfstorage-$CURRENT_DATE" --location $LOCATION --template-file $FULL_PATH --what-if
-      #     if ($userInput -like "yes") {
-      #     Write-Output "Bicep deployment proposed changes."  
-      #     az deployment sub create --name "bootstrap-tfstorage-$date" --location "germanywestcentral" --template-file $templateFilePath --what-if
-      #     } elseif ($userInput -like "no") {
-      #       Write-Output "Bicep deployment applying changes."
-      #       az deployment sub create --name "bootstrap-tfstorage-$date" --location "germanywestcentral" --template-file $templateFilePath
-      #     }
-          
