@@ -30,6 +30,6 @@ jobs:
       - name: Terraform State Storage Deployment
         run: |
           Date=$(date +'%Y-%m-%dT%H-%M-%S')
-          TemplateFilePath='./devops-infra/bootstrap.bicep'
+          TemplateFilePath='/actions-runner/_work/devops-infra/devops-infra/devops-infra/00-m-tfstatestore/bootstrap.bicep'
           Location="centralus"
           az deployment sub create --name "bootstrap-tfstorage-$Date" --location $Location --template-file $TemplateFilePath --what-if
