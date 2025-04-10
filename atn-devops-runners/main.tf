@@ -82,11 +82,15 @@ locals {
     for flattened_identity_rbac in flatten([
       for k_id, v_id in local.identities : [
         for k_rbac, v_rbac in lookup(v_id, "role_assignments", {}) : {
-          key                = "${k_id}-${k_rbac}"
-          scope              = v_rbac.scope
-          role_definition_id = v_rbac.role_definition_id
-          principal_id       = try(v_rbac.principal_id, azurerm_user_assigned_identity.id[k_id].principal_id)
-          principal_type     = try(v_rbac.principal_type, "ServicePrincipal")
+          key                  = "${k_id}-${k_rbac}"
+          scope                = v_rbac.scope
+          role_definition_name = try(v_rbac.role_definition_name, null)
+          role_definition_id   = try(v_rbac.role_definition_id, null)
+          principal_id         = try(v_rbac.principal_id, azurerm_user_assigned_identity.id[k_id].principal_id)
+          principal_type       = try(v_rbac.principal_type, "ServicePrincipal")
+          condition            = try(v_rbac.condition, null)
+          condition_version    = try(v_rbac.condition_version, null)
+          description          = try(v_rbac.description, null)
         }
       ]
     ]) : flattened_identity_rbac.key => flattened_identity_rbac
@@ -96,10 +100,14 @@ locals {
 resource "azurerm_role_assignment" "rbac" {
   for_each = local.identitity_rbac
 
-  scope              = each.value.scope
-  role_definition_id = each.value.role_definition_id
-  principal_id       = each.value.principal_id
-  principal_type     = each.value.principal_type
+  scope                = each.value.scope
+  role_definition_name = try(each.value.role_definition_name, null)
+  role_definition_id   = try(each.value.role_definition_id, null)
+  principal_id         = each.value.principal_id
+  principal_type       = each.value.principal_type
+  condition            = try(each.value.condition, null)
+  condition_version    = try(each.value.condition_version, null)
+  description          = try(each.value.description, null)
 }
 #endregion Identities and RBAC
 
