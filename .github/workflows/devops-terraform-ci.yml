@@ -90,6 +90,7 @@ jobs:
             $configDirectory = "${{ github.event.inputs.terraform_folder }}"
             $workingDirectory = "$GITHUB_WORKSPACE$configDirectory"
             Write-Output "Working Directory: $workingDirectory"
+            Write-Output "Github Workspace: $GITHUB_WORKSPACE"
             exit 1
 
       - name: Install Terraform
