@@ -98,7 +98,7 @@ jobs:
             $tfvarsBlob.Name
             Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
             Write-Output "DIRECTORY CONTENT"
-            Get-ChildItem
+            Get-ChildItem | Where-Object {$_.Name -like "*.tfvars"}
             exit 1
 
       - name: Install Terraform
