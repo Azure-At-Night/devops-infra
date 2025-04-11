@@ -75,6 +75,13 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           enable-AzPSSession: false
 
+      - name: Current Working Directory
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            Get-ChildItem
+
       - name: Download Variables for Terraform
         uses: azure/powershell@v2
         with:
@@ -83,7 +90,7 @@ jobs:
             $configDirectory = "${{ github.event.inputs.terraform_folder }}"
             $workingDirectory = "$GITHUB_WORKSPACE$configDirectory"
             Write-Output "Working Directory: $workingDirectory"
-            exit 0
+            exit 1
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
