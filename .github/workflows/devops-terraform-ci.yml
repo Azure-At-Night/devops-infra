@@ -65,7 +65,25 @@ jobs:
     
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.ID_001_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: false
+
+      - name: Download Variables for Terraform
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            $configDirectory = "${{ github.event.inputs.terraform_folder }}"
+            $workingDirectory = "$GITHUB_WORKSPACE$configDirectory"
+            Write-Output "Working Directory: $workingDirectory"
+            exit 0
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
