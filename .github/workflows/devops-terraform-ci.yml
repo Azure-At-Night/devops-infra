@@ -94,9 +94,10 @@ jobs:
             
             Set-Location $configDirectory
             $storageAccountObject = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
-            #$storageAccountContext = New-AzStorageContext -StorageAccountName $storageAccountName -UseConnectedAccount
-            Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"} #$tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
-            #Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
+            $tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
+            Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
+            Write-Output "DIRECTORY CONTENT"
+            Get-ChildItem
             exit 1
 
       - name: Install Terraform
