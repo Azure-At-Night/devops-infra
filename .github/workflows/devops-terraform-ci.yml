@@ -21,6 +21,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check Path
+        run: |
+          if [ -d "./${{ github.event.inputs.terraform_folder }}" ]; then
+            echo "Path /${{ github.event.inputs.terraform_folder }} exist"
+          else
+            echo "!!! Path /${{ github.event.inputs.terraform_folder }} does not exist !!!"
+            echo "Please use one of the following subfolders as path:"
+            ls -l
+            exit 1
+          fi
+
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -29,13 +40,13 @@ jobs:
       - name: Terraform Init
         run: |
           terraform \
-          -chdir="$${{inputs.root_module_folder_relative_path}}" \
+          -chdir="${{ github.event.inputs.terraform_folder }}" \
           init \
           -backend=false
 
       - name: Terraform Validate
         run: |
           terraform \
-          -chdir="$${{inputs.root_module_folder_relative_path}}" \
+          -chdir="${{ github.event.inputs.terraform_folder }}" \
           validate
           
