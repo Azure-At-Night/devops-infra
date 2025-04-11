@@ -95,7 +95,7 @@ jobs:
             Set-Location $configDirectory
             $storageAccountObject = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
             $storageAccountContext = New-AzStorageContext -StorageAccountName $storageAccountName -UseConnectedAccount
-            Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"} #$tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
+            Get-AzStorageBlob -Context $storageAccountContext -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"} #$tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
             #Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
             exit 1
 
