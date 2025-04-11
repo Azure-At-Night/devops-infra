@@ -95,8 +95,8 @@ jobs:
             Set-Location $configDirectory
             $storageAccountObject = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
             $tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
-            $tfvarsBlob.Name
             Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
+            Rename-Item -Path $tfvarsBlob.Name -NewName "$($tfvarsBlob.Name).auto.tfvars" # For unknown reason, when blob is downloaded, the extension is removed
             Write-Output "DIRECTORY CONTENT"
             Get-ChildItem | Where-Object {$_.Name -like "*.tfvars"}
             exit 1
