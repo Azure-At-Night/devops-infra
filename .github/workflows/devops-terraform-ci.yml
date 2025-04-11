@@ -93,9 +93,9 @@ jobs:
             $tfvarsContainer = "${{ github.event.inputs.terraform_folder }}"
             
             Set-Location $configDirectory
-            $storageAccountObject = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
-            $tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
-            Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
+            Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName #$storageAccountObject = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
+            #$tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
+            #Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
 
             Get-ChildItem
             exit 1

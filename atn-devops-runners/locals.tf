@@ -36,6 +36,10 @@ locals {
           scope              = "/subscriptions/${var.azure_subscription_id}"
           role_definition_id = "/subscriptions/${var.azure_subscription_id}/providers/Microsoft.Authorization/roleDefinitions/b7e6dc6d-f1e8-4753-8033-0f276bb0955b"
         }
+        storage_blob_data_contributor = {
+          scope              = "/subscriptions/${var.azure_subscription_id}"
+          role_definition_id = "/subscriptions/${var.azure_subscription_id}/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe"
+        }
         key_vault_administrator = {
           scope              = "/subscriptions/${var.azure_subscription_id}"
           role_definition_id = "/subscriptions/${var.azure_subscription_id}/providers/Microsoft.Authorization/roleDefinitions/00482a5a-887f-4fb3-b363-3b7fe8e74483"
