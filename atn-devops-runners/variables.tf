@@ -8,6 +8,18 @@ variable "azure_subscription_id" {
   description = "Subscription ID where resources are deployed."
 }
 
+variable "tfbackend_resource_group" {
+  description = "Terraform storage account for TF state file resource group name."
+  type        = string
+  sensitive   = false
+}
+
+variable "tfbackend_storage_account" {
+  description = "Terraform storage account for TF state file storage accoun name."
+  type        = string
+  sensitive   = false
+}
+
 variable "github_organization_name" {
   type        = string
   description = "GitHub Organisation Name"

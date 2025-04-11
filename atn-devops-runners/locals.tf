@@ -1,9 +1,7 @@
 locals {
-  default_commit_email      = "filip.vagner@azureatnight.com"
-  primary_location          = "centralus"
-  naming_suffix             = ["atn", "devops", "rnrs"]
-  tfbackend_resource_group  = "rg-atn-devops-tfstate-001"
-  tfbackend_storage_account = "statndevopsstate001"
+  default_commit_email = "filip.vagner@azureatnight.com"
+  primary_location     = "centralus"
+  naming_suffix        = ["atn", "devops", "rnrs"]
   tags = {
     scenario = "default"
   }
@@ -76,12 +74,12 @@ locals {
     tfbackend_resource_group = {
       repository    = var.github_repository_name
       variable_name = "TFBACKEND_RESOURCE_GROUP"
-      value         = local.tfbackend_resource_group
+      value         = var.tfbackend_resource_group
     }
     tfbackend_storage_account = {
       repository    = var.github_repository_name
       variable_name = "TFBACKEND_STORAGE_ACCOUNT"
-      value         = local.tfbackend_storage_account
+      value         = var.tfbackend_storage_account
     }
   }
 

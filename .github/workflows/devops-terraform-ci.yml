@@ -88,9 +88,16 @@ jobs:
           azPSVersion: "latest"
           inlineScript: |
             $configDirectory = "${{ github.event.inputs.terraform_folder }}"
-            $workingDirectory = "$GITHUB_WORKSPACE$configDirectory"
-            Write-Output "Working Directory: $workingDirectory"
-            Write-Output "Github Workspace: $GITHUB_WORKSPACE"
+            $resourceGroupName = "${{ vars.TFBACKEND_RESOURCE_GROUP }}"
+            $storageAccountName = "${{ vars.TFBACKEND_STORAGE_ACCOUNT }}"
+            $tfvarsContainer = "${{ github.event.inputs.terraform_folder }}"
+            
+            Set-Location $configDirectory
+            $storageAccountObject = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
+            $tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
+            Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
+
+            Get-ChildItem
             exit 1
 
       - name: Install Terraform
