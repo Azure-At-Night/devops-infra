@@ -106,12 +106,11 @@ jobs:
             $storageAccountObject = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
             $tfvarsBlob = Get-AzStorageBlob -Context $storageAccountObject.Context -Container $tfvarsContainer | Where-Object {$_.Name -like "*.tfvars"}
             Get-AzStorageBlobContent -Context $storageAccountObject.Context -Container $tfvarsContainer -Blob $tfvarsBlob.Name -Destination $configDirectory
-            Rename-Item -Path $tfvarsBlob.Name.Split('.')[0] -NewName "$($tfvarsBlob.Name).auto.tfvars" # For unknown reason, when blob is downloaded, the extension is removed
+            #Rename-Item -Path $tfvarsBlob.Name.Split('.')[0] -NewName "$($tfvarsBlob.Name).auto.tfvars" # For unknown reason, when blob is downloaded, the extension is removed
             Write-Output "DIRECTORY CONTENT"
             Get-ChildItem
             Write-Output "DIRECTORY CONTENT"
             Get-ChildItem | Where-Object {$_.Name -like "*.tfvars"}
-            exit 1
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
