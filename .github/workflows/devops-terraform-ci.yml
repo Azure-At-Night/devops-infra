@@ -110,7 +110,7 @@ jobs:
             $tfvarsBlob.Name
             Write-Output "DIRECTORY CONTENT"
             Get-ChildItem
-            Rename-Item -Path $tfvarsBlob.Name) -NewName "$($tfvarsBlob.Name).auto.tfvars" # For unknown reason, when blob is downloaded, the extension is removed
+            Rename-Item -Path $tfvarsBlob.Name -NewName "$($tfvarsBlob.Name).auto.tfvars" # For unknown reason, when blob is downloaded, the extension is removed
             Write-Output "DIRECTORY CONTENT"
             Get-ChildItem
             Write-Output "DIRECTORY CONTENT"
