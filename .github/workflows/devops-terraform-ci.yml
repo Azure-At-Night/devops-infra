@@ -38,6 +38,7 @@ jobs:
 
   terraform-validate:
     name: Validate Terraform
+    needs: set-ip-ontfbackend
     runs-on: self-hosted
     steps:
       - name: Checkout
