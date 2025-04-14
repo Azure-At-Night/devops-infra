@@ -14,6 +14,28 @@ permissions:
   contents: read
 
 jobs:
+  set-ip-ontfbackend:
+    name: Set runner IP on TF backend storage account
+    runs-on: self-hosted
+    steps:
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.ID_001_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - name: Azure PowerShell script
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            $resourceGroupName = "${{ vars.TFBACKEND_RESOURCE_GROUP }}"
+            $storageAccountName = "${{ vars.TFBACKEND_STORAGE_ACCOUNT }}"
+            $currentIP = (Invoke-WebRequest -Uri "https://api.ipify.org?format=json").Content | ConvertFrom-Json
+            Add-AzStorageAccountNetworkRule -ResourceGroupName $resourceGroupName -Name $storageAccountName -IPAddressOrRange $currentIP.ip
+
   terraform-validate:
     name: Validate Terraform
     runs-on: self-hosted
