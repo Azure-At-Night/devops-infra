@@ -158,6 +158,9 @@ module "github_runners" {
   user_assigned_managed_identity_id               = each.value.user_assigned_managed_identity_id
   user_assigned_managed_identity_principal_id     = each.value.user_assigned_managed_identity_principal_id
   use_private_networking                          = false
+  nat_gateway_creation_enabled                    = try(each.value.nat_gateway_creation_enabled, false)
+  nat_gateway_name                                = try(each.value.nat_gateway_name, null)
+  nat_gateway_id                                  = try(each.value.nat_gateway_id, null)
 }
 #endregion Runners
 
