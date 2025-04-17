@@ -195,12 +195,18 @@ module "custom_runner" {
   #     name       = "acrrnrsmodule1"
   #     kind = "CanNotDelete"
   # }
-  # diagnostic_settings = {
+  # container_registry_diagnostic_settings = {
   #   acr-all = {
   #     workspace_resource_id = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.OperationalInsights/workspaces/log-atn-devops-rnrs"
   #   }
   # }
-  
+  container_registry_private_endpoints = {
+    pe-acr = {
+      subnet_resource_id = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/virtualNetworks/vnet-atn-devops-rnrs/subnets/container-registry-private-endpoint"
+      private_dns_zone_resource_ids = ["/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io"]
+    }
+    
+  }
 }
 #endregion Custom module
 

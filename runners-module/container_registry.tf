@@ -90,7 +90,7 @@ resource "azurerm_management_lock" "this" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "this" {
-  for_each = var.diagnostic_settings
+  for_each = var.container_registry_diagnostic_settings
 
   name                           = each.value.name != null ? each.value.name : "diag-${var.container_registry_name}"
   target_resource_id             = azurerm_container_registry.this.id
@@ -126,81 +126,48 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
 
 
 # # The PE resource when we are managing the private_dns_zone_group block:
-# resource "azurerm_private_endpoint" "this" {
-#   for_each = { for k, v in var.private_endpoints : k => v if var.private_endpoints_manage_dns_zone_group }
+resource "azurerm_private_endpoint" "this" {
+  for_each = { for k, v in var.container_registry_private_endpoints : k => v }
 
-#   location                      = coalesce(each.value.location, var.location)
-#   name                          = each.value.name != null ? each.value.name : "pe-${var.container_registry_name}"
-#   resource_group_name           = each.value.resource_group_name != null ? each.value.resource_group_name : var.resource_group_name
-#   subnet_id                     = each.value.subnet_resource_id
-#   custom_network_interface_name = each.value.network_interface_name
-#   tags                          = each.value.tags
+  location                      = coalesce(each.value.location, var.location)
+  name                          = each.value.name != null ? each.value.name : "pe-${var.container_registry_name}"
+  resource_group_name           = each.value.resource_group_name != null ? each.value.resource_group_name : var.resource_group_name
+  subnet_id                     = each.value.subnet_resource_id
+  custom_network_interface_name = each.value.network_interface_name
+  tags                          = each.value.tags
 
-#   private_service_connection {
-#     is_manual_connection           = false
-#     name                           = each.value.private_service_connection_name != null ? each.value.private_service_connection_name : "pse-${var.container_registry_name}"
-#     private_connection_resource_id = azurerm_container_registry.this.id
-#     subresource_names              = ["registry"]
-#   }
-#   dynamic "ip_configuration" {
-#     for_each = each.value.ip_configurations
+  private_service_connection {
+    is_manual_connection           = false
+    name                           = each.value.private_service_connection_name != null ? each.value.private_service_connection_name : "pse-${var.container_registry_name}"
+    private_connection_resource_id = azurerm_container_registry.this.id
+    subresource_names              = ["registry"]
+  }
+  dynamic "ip_configuration" {
+    for_each = each.value.ip_configurations
 
-#     content {
-#       name               = ip_configuration.value.name
-#       private_ip_address = ip_configuration.value.private_ip_address
-#       member_name        = "registry"
-#       subresource_name   = "registry"
-#     }
-#   }
-#   dynamic "private_dns_zone_group" {
-#     for_each = length(each.value.private_dns_zone_resource_ids) > 0 ? ["this"] : []
+    content {
+      name               = ip_configuration.value.name
+      private_ip_address = ip_configuration.value.private_ip_address
+      member_name        = "registry"
+      subresource_name   = "registry"
+    }
+  }
+  dynamic "private_dns_zone_group" {
+    for_each = length(each.value.private_dns_zone_resource_ids) > 0 ? ["this"] : []
 
-#     content {
-#       name                 = each.value.private_dns_zone_group_name
-#       private_dns_zone_ids = each.value.private_dns_zone_resource_ids
-#     }
-#   }
-# }
+    content {
+      name                 = each.value.private_dns_zone_group_name
+      private_dns_zone_ids = each.value.private_dns_zone_resource_ids
+    }
+  }
+}
 
-# # The PE resource when we are **not** managing the private_dns_zone_group block, such as when using Azure Policy:
-# resource "azurerm_private_endpoint" "this_unmanaged_dns_zone_groups" {
-#   for_each = { for k, v in var.private_endpoints : k => v if !var.private_endpoints_manage_dns_zone_group }
+resource "azurerm_private_endpoint_application_security_group_association" "this" {
+  for_each = local.private_endpoint_application_security_group_associations
 
-#   location                      = coalesce(each.value.location, var.location)
-#   name                          = each.value.name != null ? each.value.name : "pe-${var.container_registry_name}"
-#   resource_group_name           = each.value.resource_group_name != null ? each.value.resource_group_name : var.resource_group_name
-#   subnet_id                     = each.value.subnet_resource_id
-#   custom_network_interface_name = each.value.network_interface_name
-#   tags                          = each.value.tags
-
-#   private_service_connection {
-#     is_manual_connection           = false
-#     name                           = each.value.private_service_connection_name != null ? each.value.private_service_connection_name : "pse-${var.container_registry_name}"
-#     private_connection_resource_id = azurerm_container_registry.this.id
-#     subresource_names              = ["registry"]
-#   }
-#   dynamic "ip_configuration" {
-#     for_each = each.value.ip_configurations
-
-#     content {
-#       name               = ip_configuration.value.name
-#       private_ip_address = ip_configuration.value.private_ip_address
-#       member_name        = "registry"
-#       subresource_name   = "registry"
-#     }
-#   }
-
-#   lifecycle {
-#     ignore_changes = [private_dns_zone_group]
-#   }
-# }
-
-# resource "azurerm_private_endpoint_application_security_group_association" "this" {
-#   for_each = local.private_endpoint_application_security_group_associations
-
-#   application_security_group_id = each.value.asg_resource_id
-#   private_endpoint_id           = azurerm_private_endpoint.this[each.value.pe_key].id
-# }
+  application_security_group_id = each.value.asg_resource_id
+  private_endpoint_id           = azurerm_private_endpoint.this[each.value.pe_key].id
+}
 
 # resource "azurerm_container_registry_task" "this" {
 #   for_each = var.images

@@ -78,7 +78,7 @@ Controls the Customer managed key configuration on this resource. The following 
 DESCRIPTION
 }
 
-variable "diagnostic_settings" {
+variable "container_registry_diagnostic_settings" {
   type = map(object({
     name                                     = optional(string, null)
     log_categories                           = optional(set(string), [])
@@ -109,13 +109,13 @@ variable "diagnostic_settings" {
   nullable    = false
 
   validation {
-    condition     = alltrue([for _, v in var.diagnostic_settings : contains(["Dedicated", "AzureDiagnostics"], v.log_analytics_destination_type)])
+    condition     = alltrue([for _, v in var.container_registry_diagnostic_settings : contains(["Dedicated", "AzureDiagnostics"], v.log_analytics_destination_type)])
     error_message = "Log analytics destination type must be one of: 'Dedicated', 'AzureDiagnostics'."
   }
   validation {
     condition = alltrue(
       [
-        for _, v in var.diagnostic_settings :
+        for _, v in var.container_registry_diagnostic_settings :
         v.workspace_resource_id != null || v.storage_account_resource_id != null || v.event_hub_authorization_rule_resource_id != null || v.marketplace_partner_resource_id != null
       ]
     )
@@ -163,7 +163,7 @@ DESCRIPTION
   nullable    = false
 }
 
-variable "private_endpoints" {
+variable "container_registry_private_endpoints" {
   type = map(object({
     name = optional(string, null)
     role_assignments = optional(map(object({
@@ -224,13 +224,6 @@ A map of private endpoints to create on the Container Registry. The map key is d
   - `name` - The name of the IP configuration.
   - `private_ip_address` - The private IP address of the IP configuration.
 DESCRIPTION
-  nullable    = false
-}
-
-variable "private_endpoints_manage_dns_zone_group" {
-  type        = bool
-  default     = true
-  description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
   nullable    = false
 }
 
