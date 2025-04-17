@@ -16,6 +16,12 @@ locals {
     rg_003 = {
       name = "${module.naming.resource_group.name}-003"
     }
+    rg_004 = {
+      name = "${module.naming.resource_group.name}-004"
+    }
+    rg_005 = {
+      name = "${module.naming.resource_group.name}-005"
+    }
   }
 
   identities = {
@@ -109,60 +115,73 @@ locals {
   }
 
   runners = {
-    runners1 = {
-      resource_group_name                          = module.rg["rg_001"].name
-      postfix                                      = join("-", concat(local.naming_suffix, ["001"]))
-      version_control_system_organization          = var.github_organization_name
-      version_control_system_personal_access_token = var.github_runners_personal_access_token
-      version_control_system_repository            = var.github_repository_name
-      container_instance_count                     = 2
-      container_instance_container_cpu             = 1
-      container_instance_container_cpu_limit       = 1
-      container_instance_container_memory          = 2
-      container_instance_container_memory_limit    = 2
-      container_instance_container_name            = module.naming.container_app.name
-      user_assigned_managed_identity_id            = azurerm_user_assigned_identity.id["id_001"].id
-      user_assigned_managed_identity_principal_id  = azurerm_user_assigned_identity.id["id_001"].principal_id
-    }
-    runners2 = {
-      resource_group_name                          = module.rg["rg_002"].name
-      postfix                                      = join("-", concat(local.naming_suffix, ["002"]))
-      version_control_system_organization          = var.github_organization_name
-      version_control_system_personal_access_token = var.github_runners_personal_access_token
-      version_control_system_repository            = var.github_repository_name
-      container_instance_count                     = 2
-      container_instance_container_cpu             = 1
-      container_instance_container_cpu_limit       = 1
-      container_instance_container_memory          = 2
-      container_instance_container_memory_limit    = 2
-      container_instance_container_name            = module.naming.container_app.name
-      user_assigned_managed_identity_id            = azurerm_user_assigned_identity.id["id_001"].id
-      user_assigned_managed_identity_principal_id  = azurerm_user_assigned_identity.id["id_001"].principal_id
-    }
+    # runners1 = {
+    #   resource_group_name                          = module.rg["rg_001"].name
+    #   postfix                                      = join("-", concat(local.naming_suffix, ["001"]))
+    #   version_control_system_organization          = var.github_organization_name
+    #   version_control_system_personal_access_token = var.github_runners_personal_access_token
+    #   version_control_system_enterprise            = var.github_organization_name
+    #   container_instance_count                     = 1
+    #   container_instance_container_cpu             = 1
+    #   container_instance_container_cpu_limit       = 1
+    #   container_instance_container_memory          = 2
+    #   container_instance_container_memory_limit    = 2
+    #   container_instance_container_name            = module.naming.container_app.name
+    #   user_assigned_managed_identity_id            = azurerm_user_assigned_identity.id["id_001"].id
+    #   user_assigned_managed_identity_principal_id  = azurerm_user_assigned_identity.id["id_001"].principal_id
+    # }
+    # runners2 = {
+    #   resource_group_name                          = module.rg["rg_002"].name
+    #   postfix                                      = join("-", concat(local.naming_suffix, ["002"]))
+    #   version_control_system_organization          = var.github_organization_name
+    #   version_control_system_personal_access_token = var.github_runners_personal_access_token
+    #   version_control_system_pool_name            = "atn-devops-rnrs"
+    #   container_instance_count                     = 1
+    #   container_instance_container_cpu             = 1
+    #   container_instance_container_cpu_limit       = 1
+    #   container_instance_container_memory          = 2
+    #   container_instance_container_memory_limit    = 2
+    #   container_instance_container_name            = module.naming.container_app.name
+    #   user_assigned_managed_identity_id            = azurerm_user_assigned_identity.id["id_001"].id
+    #   user_assigned_managed_identity_principal_id  = azurerm_user_assigned_identity.id["id_001"].principal_id
+    #   use_private_networking                       = true
+    #   container_instance_subnet_id                  = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/virtualNetworks/vnet-atn-devops-rnrs/subnets/runners2"
+    #   virtual_network_id                            = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/virtualNetworks/vnet-atn-devops-rnrs"
+    #   nat_gateway_id = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/natGateways/ng-atn-devops-rnrs"
+    #   container_registry_private_endpoint_subnet_id = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/virtualNetworks/vnet-atn-devops-rnrs/subnets/container-registry-private-endpoint"
+    # }
     runners3 = {
-      resource_group_name                          = module.rg["rg_003"].name
-      postfix                                      = join("-", concat(local.naming_suffix, ["003"]))
-      version_control_system_organization          = var.github_organization_name
-      version_control_system_personal_access_token = var.github_runners_personal_access_token
-      version_control_system_repository            = var.github_repository_name
-      container_instance_count                     = 2
-      container_instance_container_cpu             = 1
-      container_instance_container_cpu_limit       = 1
-      container_instance_container_memory          = 2
-      container_instance_container_memory_limit    = 2
-      container_instance_container_name            = module.naming.container_app.name
-      user_assigned_managed_identity_id            = azurerm_user_assigned_identity.id["id_001"].id
-      user_assigned_managed_identity_principal_id  = azurerm_user_assigned_identity.id["id_001"].principal_id
-      nat_gateway_creation_enabled                 = true
-      nat_gateway_name                             = "${module.naming.nat_gateway.name}-003"
+      resource_group_name                                  = module.rg["rg_003"].name
+      postfix                                              = join("-", concat(local.naming_suffix, ["003"]))
+      version_control_system_organization                  = var.github_organization_name
+      version_control_system_personal_access_token         = var.github_runners_personal_access_token
+      version_control_system_repository                    = var.github_repository_name
+      container_instance_count                             = 1
+      container_instance_container_cpu                     = 2
+      container_instance_container_cpu_limit               = 2
+      container_instance_container_memory                  = 4
+      container_instance_container_memory_limit            = 4
+      container_instance_container_name                    = module.naming.container_app.name
+      user_assigned_managed_identity_id                    = azurerm_user_assigned_identity.id["id_001"].id
+      user_assigned_managed_identity_principal_id          = azurerm_user_assigned_identity.id["id_001"].principal_id
+      use_private_networking                               = true
+      virtual_network_id                                   = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/virtualNetworks/vnet-atn-devops-rnrs"
+      container_instance_subnet_id                         = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/virtualNetworks/vnet-atn-devops-rnrs/subnets/runners3"
+      container_registry_private_endpoint_subnet_id        = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/virtualNetworks/vnet-atn-devops-rnrs/subnets/container-registry-private-endpoint"
+      container_registry_private_dns_zone_creation_enabled = false
+      container_registry_dns_zone_id                       = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io"
     }
   }
 
   runners_groups = {
+    # To find repository ID, go to repository, in browser open developer tools (F12) and look for value "octolytics-dimension-repository_id"
     runners1 = {
-      name        = "atn-devops-rnrs-001"
-      description = "Github runners group for atn-devops-rnrs-001"
-      visibility  = "all"
+      name        = "atn-devops-rnrs"
+      description = "Github runners group for ATN DevOps"
+      visibility  = "selected"
+      # selected_repository_ids = [
+      #   "960415963" # devops-infra
+      # ]
     }
   }
 }
