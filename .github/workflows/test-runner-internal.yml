@@ -5,7 +5,7 @@ on:
 
 jobs:
   authenticate:
-    name: 'Bicep Plan'
+    name: 'Authenticate to Azure'
     runs-on: self-hosted
 
     steps:
@@ -19,5 +19,9 @@ jobs:
     - name: Az CLI version
       run: |
         az version
+
+    - name: Show account information
+      run: |
+        az account show
 
   
