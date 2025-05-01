@@ -27,6 +27,9 @@ jobs:
       #     inlineScript: |
       #       az account show
 
-      - name: Az CLI version
-        run: |
-          az version
+      - name: Azure PowerShell script
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            Get-AzContext
