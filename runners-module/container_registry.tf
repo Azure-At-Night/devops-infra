@@ -214,8 +214,8 @@ resource "azurerm_role_assignment" "container_registry_push_for_task" {
   role_definition_name = "AcrPush"
 }
 
-# resource "azurerm_role_assignment" "container_registry_pull_for_container_instance" {
-#   principal_id         = azurerm_user_assigned_identity.id.id
-#   scope                = module.container_registry.resource_id
-#   role_definition_name = "AcrPull"
-# }
+resource "azurerm_role_assignment" "container_registry_pull_for_container_instance" {
+  principal_id         = var.user_assigned_managed_identity_principal_id
+  scope                = azurerm_container_registry.this.id
+  role_definition_name = "AcrPull"
+}

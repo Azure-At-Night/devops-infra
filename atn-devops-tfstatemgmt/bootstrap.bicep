@@ -1,6 +1,6 @@
 targetScope = 'subscription'
 
-var varResourceGroupName = 'rg-atn-devops-tfstate-001'
+var varResourceGroupName = 'rg-atn-devops-tfstatemgmt'
 var varTags = {
   WorkloadName: 'Terraform State File Storage'
   Criticality: 'high'
@@ -9,7 +9,7 @@ var varTags = {
 }
 var varStorageAccounts = [
   {
-    name: 'statndevopsstate001'
+    name: 'statntfstate001'
     location: 'centralus'
     skuName: 'Standard_RAGRS'
     tags: varTags
@@ -33,7 +33,7 @@ var varStorageAccounts = [
     ]
     roleAssignments: [
       {
-        principalId: '41fa029f-be49-48bd-beee-4732c5880743'
+        principalId: '532639c3-0eae-46a8-adfb-162c0089539a'
         principalType: 'User'
         roleDefinitionIdOrName: 'Storage Blob Data Contributor'
       }

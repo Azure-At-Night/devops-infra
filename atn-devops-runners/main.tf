@@ -130,6 +130,19 @@ resource "github_actions_secret" "gha_secret" {
 }
 #endregion Github Action variables and secrets
 
+#region Github runnners groups
+resource "github_actions_runner_group" "gha_runner_group" {
+  for_each = local.runners_groups
+
+  name                       = each.value.name
+  restricted_to_workflows    = try(each.value.restricted_to_workflows, false)
+  selected_repository_ids    = try(each.value.selected_repository_ids, null)
+  selected_workflows         = try(each.value.selected_workflows, null)
+  visibility                 = each.value.visibility
+  allows_public_repositories = try(each.value.allows_public_repositories, false)
+}
+#endregion Github runnners groups
+
 #region Runners
 module "github_runners" {
   for_each = local.runners
@@ -169,44 +182,53 @@ module "github_runners" {
 }
 #endregion Runners
 
-#region Github runnners groups
-resource "github_actions_runner_group" "gha_runner_group" {
-  for_each = local.runners_groups
+#region Custom module - Public Runners
+# module "custom_runner" {
+#   source = "../runners-module"
 
-  name                       = each.value.name
-  restricted_to_workflows    = try(each.value.restricted_to_workflows, false)
-  selected_repository_ids    = try(each.value.selected_repository_ids, null)
-  selected_workflows         = try(each.value.selected_workflows, null)
-  visibility                 = each.value.visibility
-  allows_public_repositories = try(each.value.allows_public_repositories, false)
-}
-#endregion Github runnners groups
+#   resource_group_name           = module.rg["rg_002"].name
+#   location                      = module.primary_location.name
+#   container_registry_name       = join("", concat(local.naming_suffix, ["rn"], ["001"]))
+#   container_registry_sku        = "Premium"
+#   public_network_access_enabled = true
+#   network_rule_bypass_option    = "AzureServices"
+#   # container_registry_lock = {
+#   #   name = "acrrnrsmodule1"
+#   #   kind = "CanNotDelete"
+#   # }
+#   container_registry_diagnostic_settings = {
+#     acr-all = {
+#       workspace_resource_id = local.log_analytics_workspace_id
+#     }
+#   }
+#   # container_registry_private_endpoints = {
+#   #   pe-acr = {
+#   #     subnet_resource_id = local.container_registry_private_endpoint_subnet_id
+#   #     private_dns_zone_resource_ids = [local.container_registry_dns_zone_id]
+#   #     application_security_group_associations = {
+#   #       asg1 = local.application_security_group_resource_id
+#   #     }
+#   #   }
+#   # }
+#   custom_container_registry_images = {
+#     avm_img = {
+#       task_name            = "github-container-instance-image-build-task"
+#       dockerfile_path      = "dockerfile"
+#       context_path         = "https://github.com/Azure/avm-container-images-cicd-agents-and-runners#bc4087f:github-runner-aci"
+#       context_access_token = "a"
+#       image_names          = ["github-runner:bc4087f"]
+#     }
+#   }
 
-#region Custom module
-module "custom_runner" {
-  source  = "../runners-module"
+#   container_instance_name           = join("-", concat(local.naming_suffix, ["rn"], ["001"]))
+#   container_name                    = join("-", concat(local.naming_suffix, ["rn"], ["001"]))
+#   container_registry_login_server   = "atnrnrsrn001.azurecr.io"
+#   container_image                   = "github-runner:bc4087f"
+#   user_assigned_managed_identity_id = azurerm_user_assigned_identity.id["id_002"].id
+#   user_assigned_managed_identity_principal_id = azurerm_user_assigned_identity.id["id_002"].principal_id
+#   use_private_networking = false
+# }
+#endregion Custom module - Public Runners
 
-  resource_group_name     = module.rg["rg_004"].name
-  location                = module.primary_location.name
-  container_registry_name = "acrrnrsmodule1"
-  container_registry_sku  = "Premium"
-  use_private_networking = false
-  # container_registry_lock = {
-  #     name       = "acrrnrsmodule1"
-  #     kind = "CanNotDelete"
-  # }
-  # container_registry_diagnostic_settings = {
-  #   acr-all = {
-  #     workspace_resource_id = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.OperationalInsights/workspaces/log-atn-devops-rnrs"
-  #   }
-  # }
-  container_registry_private_endpoints = {
-    pe-acr = {
-      subnet_resource_id = "/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/virtualNetworks/vnet-atn-devops-rnrs/subnets/container-registry-private-endpoint"
-      private_dns_zone_resource_ids = ["/subscriptions/018805fe-880b-417d-bf6b-6eccfbefac5a/resourceGroups/rg-manualresources/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io"]
-    }
-    
-  }
-}
-#endregion Custom module
-
+#region Custom module - Internal Runners with custom DNS zone
+#endregion Custom module - Internal Runners with custom DNS zone
