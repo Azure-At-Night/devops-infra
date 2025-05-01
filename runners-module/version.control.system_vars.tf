@@ -20,6 +20,18 @@ variable "version_control_system_type" {
   # }
 }
 
+variable "github_organization_name" {
+  type        = string
+  default     = null
+  description = "Name of Github organization."
+}
+
+variable "github_repository_name" {
+  type        = string
+  default     = null
+  description = "Name of Github repository."
+}
+
 variable "version_control_system_agent_name_prefix" {
   type        = string
   default     = null

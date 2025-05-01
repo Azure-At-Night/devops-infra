@@ -189,7 +189,7 @@ module "custom_runner" {
   resource_group_name = module.rg["rg_002"].name
   location            = module.primary_location.name
 
-  container_registry_name       = join("", concat(local.naming_suffix, ["rn"], ["001"]))
+  container_registry_name       = join("", concat(local.naming_suffix, ["rm"], ["002"]))
   container_registry_sku        = "Premium"
   public_network_access_enabled = true
   network_rule_bypass_option    = "AzureServices"
@@ -221,21 +221,24 @@ module "custom_runner" {
     }
   }
 
-  container_instance_name                     = join("-", concat(local.naming_suffix, ["rn"], ["001"]))
-  container_name                              = join("-", concat(local.naming_suffix, ["rn"], ["001"]))
-  container_registry_login_server             = "atnrnrsrn001.azurecr.io"
-  container_image                             = "github-runner:bc4087f"
+  container_instance_count = 3
+  container_instance_container_name                     = "atn-rnrs-rm-002" #join("-", concat(local.naming_suffix, ["rm"], ["001"]))
+  container_instance_name_prefix                              = "atn-rnrs-rm-002" #module.naming.container_app.name #join("-", concat(local.naming_suffix, ["rn"], ["001"]))
+  container_registry_login_server             = "atnrnrsrm002.azurecr.io" #FIXME this has to be handled within module
+  container_image                             = "github-runner:bc4087f" #FIXME this has to be handled within module
   user_assigned_managed_identity_id           = azurerm_user_assigned_identity.id["id_002"].id
   user_assigned_managed_identity_principal_id = azurerm_user_assigned_identity.id["id_002"].principal_id
   use_private_networking                      = false
-  environment_variables = {
-    GH_RUNNER_URL = "https://github.com/Azure-At-Night/devops-infra/"
-    GH_RUNNER_NAME = join("-", concat(local.naming_suffix, ["rn"], ["001"]))
-  }
+  github_organization_name = var.github_organization_name
+  github_repository_name   = var.github_repository_name
+  # environment_variables = {
+  #   GH_RUNNER_URL  = "https://github.com/Azure-At-Night/devops-infra/"
+  #   GH_RUNNER_NAME = join("-", concat(local.naming_suffix, ["rm"], ["002"]))
+  # }
   sensitive_environment_variables = {
     GH_RUNNER_TOKEN = var.github_runners_personal_access_token
   }
-  container_instance_workspace_id = "09891203-6418-453c-a543-d1522b0cdac7"
+  container_instance_workspace_id  = "09891203-6418-453c-a543-d1522b0cdac7"
   container_instance_workspace_key = "obxMAEpMUdRwBXOzI5UyBwp/1WrKqshtNqfrbBhV4aECIde4JV7MeKpkcDbAqyb/dUACaf/s2r51Cztl11wmoA=="
 
   version_control_system_type                  = "github"

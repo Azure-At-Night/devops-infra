@@ -177,22 +177,22 @@ locals {
 
   runners = {
     # Public runners
-    runners1 = {
-      resource_group_name                          = module.rg["rg_001"].name
-      postfix                                      = join("-", concat(local.naming_suffix, ["ax"], ["001"]))
-      version_control_system_organization          = var.github_organization_name
-      version_control_system_personal_access_token = var.github_runners_personal_access_token
-      version_control_system_enterprise            = var.github_organization_name
-      version_control_system_repository            = var.github_repository_name
-      container_instance_count                     = 1
-      container_instance_container_cpu             = 1
-      container_instance_container_cpu_limit       = 1
-      container_instance_container_memory          = 2
-      container_instance_container_memory_limit    = 2
-      container_instance_container_name            = module.naming.container_app.name
-      user_assigned_managed_identity_id            = azurerm_user_assigned_identity.id["id_001"].id
-      user_assigned_managed_identity_principal_id  = azurerm_user_assigned_identity.id["id_001"].principal_id
-    }
+    # runners1 = {
+    #   resource_group_name                          = module.rg["rg_001"].name
+    #   postfix                                      = join("-", concat(local.naming_suffix, ["ax"], ["001"]))
+    #   version_control_system_organization          = var.github_organization_name
+    #   version_control_system_personal_access_token = var.github_runners_personal_access_token
+    #   version_control_system_enterprise            = var.github_organization_name
+    #   version_control_system_repository            = var.github_repository_name
+    #   container_instance_count                     = 1
+    #   container_instance_container_cpu             = 1
+    #   container_instance_container_cpu_limit       = 1
+    #   container_instance_container_memory          = 2
+    #   container_instance_container_memory_limit    = 2
+    #   container_instance_container_name            = module.naming.container_app.name
+    #   user_assigned_managed_identity_id            = azurerm_user_assigned_identity.id["id_001"].id
+    #   user_assigned_managed_identity_principal_id  = azurerm_user_assigned_identity.id["id_001"].principal_id
+    # }
 
 
     # runners2 = {

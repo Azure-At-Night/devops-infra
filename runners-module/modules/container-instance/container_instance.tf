@@ -45,6 +45,7 @@ resource "azurerm_container_group" "alz" {
     }
   }
 
+  #TODO make this optional
   diagnostics {
     log_analytics {
       # In this settings logs everything into following tables ContainerEvent_CL, ContainerInstanceLog_CL

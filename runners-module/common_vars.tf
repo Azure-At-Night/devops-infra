@@ -14,3 +14,9 @@ variable "tags" {
   default     = null
   description = "(Optional) Tags of the resource."
 }
+
+variable "user_assigned_managed_identity_principal_id" {
+  type        = string
+  default     = null
+  description = "The principal id of the user assigned managed identity. Only required if `user_assigned_managed_identity_creation_enabled == false`."
+}
