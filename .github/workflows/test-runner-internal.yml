@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  bicep-plan:
-    name: 'Bicep Plan'
-    runs-on: ubuntu-latest
+  authenticate:
+    name: 'Authenticate to Azure'
+    runs-on: self-hosted
 
     steps:
     - name: Checkout repository
