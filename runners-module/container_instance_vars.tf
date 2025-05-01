@@ -96,3 +96,22 @@ variable "use_private_networking" {
   default     = true
   description = "Flag to indicate whether to use private networking"
 }
+
+variable "container_instance_environment_variables" {
+  type = set(object({
+    name  = string
+    value = string
+  }))
+  default     = []
+  description = "List of additional environment variables to pass to the container."
+}
+
+variable "container_instance_sensitive_environment_variables" {
+  type = set(object({
+    name  = string
+    value = string
+  }))
+  sensitive   = true
+  default     = []
+  description = "List of additional sensitive environment variables to pass to the container."
+}

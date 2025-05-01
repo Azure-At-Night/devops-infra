@@ -14,10 +14,10 @@ variable "version_control_system_type" {
   description = "The type of the version control system to deploy the agents too. Allowed values are 'azuredevops' or 'github'"
   nullable    = false
 
-  validation {
-    condition     = contains(local.valid_version_control_systems, var.version_control_system_type)
-    error_message = "cicd_system must be one of 'azuredevops' or 'github'"
-  }
+  # validation {
+  #   condition     = contains(local.valid_version_control_systems, var.version_control_system_type)
+  #   error_message = "cicd_system must be one of 'azuredevops' or 'github'"
+  # }
 }
 
 variable "version_control_system_agent_name_prefix" {
