@@ -1,42 +1,6 @@
-variable "location" {
-  type        = string
-  description = "Azure region where the resource should be deployed."
-  nullable    = false
-}
-
 variable "container_registry_name" {
   type        = string
   description = "The name of the container registry"
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = "The name of the resource group in which to create the container registry"
-}
-
-variable "use_private_networking" {
-  type        = bool
-  description = "Whether to use private networking for the container registry"
-}
-
-variable "images" {
-  type = map(object({
-    task_name            = string
-    dockerfile_path      = string
-    context_path         = string
-    context_access_token = optional(string, "a") # This `a` is a dummy value because the context_access_token should not be required in the provider
-    image_names          = list(string)
-  }))
-  default     = {}
-  description = <<DESCRIPTION
-A map of objects that define the images to build in the container registry. The key of the map is the name of the image and the value is an object with the following attributes:
-
-- `task_name` - The name of the task to create for building the image (e.g. `image-build-task`)
-- `dockerfile_path` - The path to the Dockerfile to use for building the image (e.g. `dockerfile`)
-- `context_path` - The path to the context of the Dockerfile in three sections `<repository-url>#<repository-commit>:<repository-folder-path>` (e.g. https://github.com/Azure/terraform-azurerm-avm-ptn-cicd-agents-and-runners#8ff4b85:container-images/azure-devops-agent)
-- `context_access_token` - The access token to use for accessing the context. Supply a PAT if targetting a private repository.
-- `image_names` - A list of the names of the images to build (e.g. `["image-name:tag"]`)
-DESCRIPTION
 }
 
 variable "container_registry_private_dns_zone_id" {
@@ -49,12 +13,6 @@ variable "container_registry_subnet_id" {
   type        = string
   default     = null
   description = "The id of the subnet to use for the private endpoint"
-}
-
-variable "tags" {
-  type        = map(string)
-  default     = null
-  description = "(Optional) Tags of the resource."
 }
 
 variable "customer_managed_key" {
@@ -288,6 +246,7 @@ variable "network_rule_bypass_option" {
     error_message = "The network_rule_bypass_option variable must be either `AzureServices` or `None`."
   }
   description = <<DESCRIPTION
+NOTE: Must be set to AzureServices if variable public_network_access_enabled is set to false.
 Specifies whether to allow trusted Azure services access to a network restricted Container Registry.
 Possible values are `None` and `AzureServices`. Defaults to `None`.
 DESCRIPTION
@@ -345,6 +304,27 @@ variable "retention_policy_in_days" {
 If enabled, this retention policy will purge an untagged manifest after a specified number of days.
 
 - `days` - (Optional) The number of days before the policy Defaults to 7 days.
+
+DESCRIPTION
+}
+
+variable "custom_container_registry_images" {
+  type = map(object({
+    task_name            = string
+    dockerfile_path      = string
+    context_path         = string
+    context_access_token = optional(string, "a") # This `a` is a dummy value because the context_access_token should not be required in the provider
+    image_names          = list(string)
+  }))
+  default     = null
+  description = <<DESCRIPTION
+The images to build and push to the container registry. This is only relevant if `container_registry_creation_enabled` is `true` and `use_default_container_image` is set to `false`.
+
+- task_name: The name of the task to create for building the image (e.g. `image-build-task`)
+- dockerfile_path: The path to the Dockerfile to use for building the image (e.g. `dockerfile`)
+- context_path: The path to the context of the Dockerfile in three sections `<repository-url>#<repository-commit>:<repository-folder-path>` (e.g. https://github.com/Azure/avm-container-images-cicd-agents-and-runners#bc4087f:azure-devops-agent)
+- context_access_token: The access token to use for accessing the context. Supply a PAT if targetting a private repository.
+- image_names: A list of the names of the images to build (e.g. `["image-name:tag"]`)
 
 DESCRIPTION
 }

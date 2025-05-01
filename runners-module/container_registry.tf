@@ -124,8 +124,6 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
   }
 }
 
-
-# # The PE resource when we are managing the private_dns_zone_group block:
 resource "azurerm_private_endpoint" "this" {
   for_each = { for k, v in var.container_registry_private_endpoints : k => v }
 
@@ -169,55 +167,55 @@ resource "azurerm_private_endpoint_application_security_group_association" "this
   private_endpoint_id           = azurerm_private_endpoint.this[each.value.pe_key].id
 }
 
-# resource "azurerm_container_registry_task" "this" {
-#   for_each = var.images
+resource "azurerm_container_registry_task" "this" {
+  for_each = var.custom_container_registry_images
 
-#   container_registry_id = module.container_registry.resource_id
-#   name                  = each.value.task_name
-#   tags                  = var.tags
+  container_registry_id = azurerm_container_registry.this.id
+  name                  = each.value.task_name
+  tags                  = var.tags
 
-#   docker_step {
-#     context_access_token = each.value.context_access_token
-#     context_path         = each.value.context_path
-#     dockerfile_path      = each.value.dockerfile_path
-#     image_names          = each.value.image_names
-#   }
-#   identity {
-#     type = "SystemAssigned" # Note this has to be a System Assigned Identity to work with private networking and `network_rule_bypass_option` set to `AzureServices`
-#   }
-#   platform {
-#     os = "Linux"
-#   }
-#   registry_credential {
-#     custom {
-#       login_server = module.container_registry.resource.login_server
-#       identity     = "[system]"
-#     }
-#   }
-# }
+  docker_step {
+    context_access_token =  each.value.context_access_token
+    context_path         =  each.value.context_path
+    dockerfile_path      = each.value.dockerfile_path
+    image_names          =  each.value.image_names
+  }
+  identity {
+    type = "SystemAssigned" # Note this has to be a System Assigned Identity to work with private networking and `network_rule_bypass_option` set to `AzureServices`
+  }
+  platform {
+    os = "Linux"
+  }
+  registry_credential {
+    custom {
+      login_server = azurerm_container_registry.this.login_server
+      identity     = "[system]"
+    }
+  }
+}
 
-# resource "azurerm_container_registry_task_schedule_run_now" "this" {
-#   for_each = var.images
+resource "azurerm_container_registry_task_schedule_run_now" "this" {
+  for_each = var.custom_container_registry_images
 
-#   container_registry_task_id = azurerm_container_registry_task.this[each.key].id
+  container_registry_task_id = azurerm_container_registry_task.this[each.key].id
 
-#   depends_on = [azurerm_role_assignment.container_registry_push_for_task]
+  depends_on = [azurerm_role_assignment.container_registry_push_for_task]
 
-#   lifecycle {
-#     replace_triggered_by = [azurerm_container_registry_task.this]
-#   }
-# }
+  lifecycle {
+    replace_triggered_by = [azurerm_container_registry_task.this]
+  }
+}
+
+resource "azurerm_role_assignment" "container_registry_push_for_task" {
+  for_each = var.custom_container_registry_images
+
+  principal_id         = azurerm_container_registry_task.this[each.key].identity[0].principal_id
+  scope                = azurerm_container_registry.this.id
+  role_definition_name = "AcrPush"
+}
 
 # resource "azurerm_role_assignment" "container_registry_pull_for_container_instance" {
 #   principal_id         = azurerm_user_assigned_identity.id.id
 #   scope                = module.container_registry.resource_id
 #   role_definition_name = "AcrPull"
-# }
-
-# resource "azurerm_role_assignment" "container_registry_push_for_task" {
-#   for_each = var.images
-
-#   principal_id         = azurerm_container_registry_task.this[each.key].identity[0].principal_id
-#   scope                = module.container_registry.resource_id
-#   role_definition_name = "AcrPush"
 # }
