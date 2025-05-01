@@ -235,6 +235,8 @@ module "custom_runner" {
   sensitive_environment_variables = {
     GH_RUNNER_TOKEN = var.github_runners_personal_access_token
   }
+  container_instance_workspace_id = "09891203-6418-453c-a543-d1522b0cdac7"
+  container_instance_workspace_key = "obxMAEpMUdRwBXOzI5UyBwp/1WrKqshtNqfrbBhV4aECIde4JV7MeKpkcDbAqyb/dUACaf/s2r51Cztl11wmoA=="
 
   version_control_system_type                  = "github"
   version_control_system_personal_access_token = var.github_runners_personal_access_token

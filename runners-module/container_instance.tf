@@ -47,9 +47,11 @@ resource "azurerm_container_group" "alz" {
 
   diagnostics {
     log_analytics {
-      log_type = "ContainerInsights"
-      workspace_id = var.container_instance_worskspace_id
-      workspace_key = var.container_instance_worskspace_key
+      # In this settings logs everything into following tables ContainerEvent_CL, ContainerInstanceLog_CL
+      workspace_id = var.container_instance_workspace_id
+      workspace_key = var.container_instance_workspace_key
+      #log_type = "ContainerInstanceLogs"
+      #metadata = {}
     }
   }
 }

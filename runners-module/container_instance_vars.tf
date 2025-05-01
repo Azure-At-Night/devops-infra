@@ -116,13 +116,13 @@ variable "container_instance_sensitive_environment_variables" {
   description = "List of additional sensitive environment variables to pass to the container."
 }
 
-variable "container_instance_worskspace_id" {
+variable "container_instance_workspace_id" {
   type        = string
   default     = null
   description = "The Workspace ID of the Log Analytics Workspace."
 }
 
-variable "container_instance_worskspace_key" {
+variable "container_instance_workspace_key" {
   type        = string
   default     = null
   description = "The Log Analytics Workspace key to access."
