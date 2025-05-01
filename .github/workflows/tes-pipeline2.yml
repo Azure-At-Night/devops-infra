@@ -5,7 +5,7 @@ on:
 
 jobs:
   print-hello-world:
-    runs-on: [self-hosted, atn]
+    runs-on: self-hosted
     steps:
       - name: Print Hello World
         run: echo "Hello, World!"
