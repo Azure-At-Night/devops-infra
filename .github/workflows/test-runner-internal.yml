@@ -1,0 +1,26 @@
+name: Test Pipeline on Internal Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bicep-plan:
+    name: 'Bicep Plan'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure Subscription
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az account show
+
+  
