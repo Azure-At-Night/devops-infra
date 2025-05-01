@@ -44,4 +44,12 @@ resource "azurerm_container_group" "alz" {
       user_assigned_identity_id = var.user_assigned_managed_identity_id
     }
   }
+
+  diagnostics {
+    log_analytics {
+      log_type = "ContainerInsights"
+      workspace_id = var.container_instance_worskspace_id
+      workspace_key = var.container_instance_worskspace_key
+    }
+  }
 }
