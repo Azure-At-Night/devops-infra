@@ -24,4 +24,8 @@ jobs:
       run: |
         az account show
 
-  
+    - name: Get Key Vault secret
+      id: get-secret
+      run: |
+        secret=$(az keyvault secret show --name atn-secret --vault-name kvatnmanual1 --query value -o tsv)
+        echo "secret=$secret"
