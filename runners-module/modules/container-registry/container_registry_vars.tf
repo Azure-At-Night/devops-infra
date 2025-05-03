@@ -257,7 +257,7 @@ variable "data_endpoint_enabled" {
 
 variable "network_rule_bypass_option" {
   type    = string
-  default = "None"
+  default = "AzureServices"
   validation {
     condition     = var.network_rule_bypass_option == null ? true : contains(["AzureServices", "None"], var.network_rule_bypass_option)
     error_message = "The network_rule_bypass_option variable must be either `AzureServices` or `None`."
