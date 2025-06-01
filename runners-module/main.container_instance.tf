@@ -11,6 +11,7 @@ variable "container_image" {
 variable "container_registry_login_server" {
   type        = string
   description = "Login server of the container registry"
+  default     = null
 }
 
 variable "user_assigned_managed_identity_id" {
@@ -123,25 +124,18 @@ variable "container_instance_count" {
   default     = 1
 }
 
-variable "container_instance_name_prefix" {
-  type        = string
-  default     = null
-  description = "This is container instance resource name in Azure."
-}
-
-variable "container_instance_container_name" {
+variable "container_instance_name" {
   type        = string
   default     = null
   description = "This is name of container running within container instance resource in Azure."
 }
 
 locals {
-  container_instance_container_name = var.container_instance_container_name
-  container_instance_name_prefix    = var.container_instance_name_prefix #var.container_instance_name_prefix != null ? var.container_instance_name_prefix : "ci-${var.postfix}"
+  container_instance_name = var.container_instance_name
 
   container_instances = {
     for instance in range(0, var.container_instance_count) : instance => {
-      name               = "${local.container_instance_name_prefix}-${instance + 1}"
+      name               = "${local.container_instance_name}-${instance + 1}"
       availability_zones = [(instance % 3) + 1]
     }
   }
@@ -150,10 +144,11 @@ locals {
 module "container_instance" {
   source                            = "./modules/container-instance"
   for_each                          = local.container_instances
+  
   location                          = var.location
   resource_group_name               = var.resource_group_name
   container_instance_name           = each.value.name
-  container_name                    = var.container_instance_name_prefix #var.container_instance_container_name
+  container_name                    = var.container_instance_name
   container_image                   = var.container_image
   environment_variables             = {
     GH_RUNNER_NAME = each.value.name
