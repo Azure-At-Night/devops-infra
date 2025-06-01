@@ -241,10 +241,10 @@ variable "data_endpoint_enabled" {
 variable "network_rule_bypass_option" {
   type    = string
   default = "AzureServices"
-#   validation {
-#     condition     = var.network_rule_bypass_option == null ? true : contains(["AzureServices", "None"], var.network_rule_bypass_option)
-#     error_message = "The network_rule_bypass_option variable must be either `AzureServices` or `None`."
-#   }
+  #   validation {
+  #     condition     = var.network_rule_bypass_option == null ? true : contains(["AzureServices", "None"], var.network_rule_bypass_option)
+  #     error_message = "The network_rule_bypass_option variable must be either `AzureServices` or `None`."
+  #   }
   description = <<DESCRIPTION
 NOTE: Must be set to AzureServices if variable public_network_access_enabled is set to false.
 Specifies whether to allow trusted Azure services access to a network restricted Container Registry.
@@ -340,18 +340,18 @@ variable "delays" {
 }
 
 module "container_registry" {
-  source                                  = "./modules/container-registry"
-  location                                = var.location
-  container_registry_name                 = var.container_registry_name
-  resource_group_name                     = var.resource_group_name
-  container_registry_sku                 = var.container_registry_sku
+  source                                      = "./modules/container-registry"
+  location                                    = var.location
+  container_registry_name                     = var.container_registry_name
+  resource_group_name                         = var.resource_group_name
+  container_registry_sku                      = var.container_registry_sku
   user_assigned_managed_identity_principal_id = var.user_assigned_managed_identity_principal_id
-  public_network_access_enabled           = var.public_network_access_enabled
-  container_registry_subnet_id            = try(var.container_registry_subnet_id)
-  container_registry_private_endpoints    = try(var.container_registry_private_endpoints)
-  tags                                    = var.tags
-  custom_container_registry_images        = var.custom_container_registry_images
-  zone_redundancy_enabled = var.zone_redundancy_enabled
+  public_network_access_enabled               = var.public_network_access_enabled
+  container_registry_subnet_id                = try(var.container_registry_subnet_id)
+  container_registry_private_endpoints        = try(var.container_registry_private_endpoints)
+  tags                                        = var.tags
+  custom_container_registry_images            = var.custom_container_registry_images
+  zone_redundancy_enabled                     = var.zone_redundancy_enabled
 }
 
 resource "time_sleep" "delay_after_container_image_build" {

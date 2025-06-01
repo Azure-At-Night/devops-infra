@@ -57,11 +57,11 @@ variable "container_registry_username" {
   description = "Username of the container registry"
 }
 
-# variable "environment_variables" {
-#   type        = map(string)
-#   default     = {}
-#   description = "Environment variables for the container"
-# }
+variable "environment_variables" {
+  type        = map(string)
+  default     = {}
+  description = "Environment variables for the container"
+}
 
 variable "sensitive_environment_variables" {
   type        = map(string)
@@ -126,7 +126,7 @@ variable "container_instance_name" {
 }
 
 locals {
-  container_instance_name = var.container_instance_name
+  container_instance_name         = var.container_instance_name
   container_registry_login_server = var.container_registry_login_server != null ? var.container_registry_login_server : "${var.container_registry_name}.azurecr.io"
 
   container_instances = {
@@ -138,26 +138,28 @@ locals {
 }
 
 module "container_instance" {
-  source                            = "./modules/container-instance"
-  for_each                          = local.container_instances
-  
-  location                          = var.location
-  resource_group_name               = var.resource_group_name
-  container_instance_name           = each.value.name
-  container_name                    = var.container_instance_name
-  container_image                   = var.container_image
-  environment_variables             = {
-    GH_RUNNER_NAME = each.value.name
-    GH_RUNNER_URL = "https://github.com/${var.github_organization_name}/${var.github_repository_name}/"
-  }
-  sensitive_environment_variables   = var.sensitive_environment_variables
-  use_private_networking           = var.use_private_networking
-  subnet_id            = try(var.subnet_id, null)
+  source   = "./modules/container-instance"
+  for_each = local.container_instances
+
+  location                = var.location
+  resource_group_name     = var.resource_group_name
+  container_instance_name = each.value.name
+  container_name          = var.container_instance_name
+  container_image         = var.container_image
+  environment_variables = merge(
+    var.environment_variables,
+    {
+      "GH_RUNNER_NAME" = each.value.name
+    }
+  )
+  sensitive_environment_variables = var.sensitive_environment_variables
+  use_private_networking          = var.use_private_networking
+  subnet_id                       = try(var.subnet_id, null)
   #availability_zones                = var.container_instance_use_availability_zones ? each.value.availability_zones : null #TODO Add support for availability zones
   user_assigned_managed_identity_id = var.user_assigned_managed_identity_id
-  container_registry_login_server = local.container_registry_login_server
-  container_instance_workspace_id = var.container_instance_workspace_id
-  container_instance_workspace_key = var.container_instance_workspace_key
+  container_registry_login_server   = local.container_registry_login_server
+  container_instance_workspace_id   = var.container_instance_workspace_id
+  container_instance_workspace_key  = var.container_instance_workspace_key
 
   depends_on = [module.container_registry, time_sleep.delay_after_container_image_build]
 }

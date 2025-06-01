@@ -7,7 +7,7 @@ module "custom_runner_public" {
 
   container_registry_name       = "acrorbrnr002"
   container_registry_sku        = "Basic"
-  zone_redundancy_enabled    = false
+  zone_redundancy_enabled       = false
   public_network_access_enabled = true
   network_rule_bypass_option    = "AzureServices"
   container_registry_diagnostic_settings = {
@@ -26,21 +26,18 @@ module "custom_runner_public" {
   }
 
   container_instance_count                    = 1
-  container_instance_name           = "ci-orb-rnr-002"
-  container_image                             = "github-runner:63f4d76"   #FIXME this has to be handled within module
+  container_instance_name                     = "ci-orb-rnr-002"
+  container_image                             = "github-runner:63f4d76" #FIXME this has to be handled within module
   user_assigned_managed_identity_id           = azurerm_user_assigned_identity.id["id_002"].id
   user_assigned_managed_identity_principal_id = azurerm_user_assigned_identity.id["id_002"].principal_id
   use_private_networking                      = false
-  github_organization_name                    = var.github_organization_name
-  github_repository_name                      = var.github_repository_name
+  environment_variables = {
+    GH_RUNNER_URL  = "https://github.com/${var.github_organization_name}/${var.github_repository_name}/"
+  }
   sensitive_environment_variables = {
     GH_RUNNER_TOKEN = var.github_runners_personal_access_token
   }
   container_instance_workspace_id  = var.workspace_id
   container_instance_workspace_key = var.workspace_key
-
-  version_control_system_personal_access_token = var.github_runners_personal_access_token
-  version_control_system_organization          = var.github_organization_name
-  version_control_system_repository            = var.github_repository_name
 }
 #endregion Custom module - Public Runners
