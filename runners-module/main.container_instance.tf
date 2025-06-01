@@ -127,6 +127,12 @@ variable "container_instance_name" {
   description = "This is name of container running within container instance resource in Azure."
 }
 
+variable "container_instance_use_availability_zones" {
+  type        = bool
+  default     = false
+  description = "Should the container instance be deployed in availability zones."
+}
+
 locals {
   container_registry_login_server = var.container_registry_login_server != null ? var.container_registry_login_server : "${var.container_registry_name}.azurecr.io"
   container_image = var.container_image != null ? var.container_image : values(var.custom_container_registry_images)[0].image_names[0]
@@ -156,7 +162,7 @@ module "container_instance" {
   sensitive_environment_variables = var.sensitive_environment_variables
   use_private_networking          = var.use_private_networking
   subnet_id                       = try(var.subnet_id, null)
-  #availability_zones                = var.container_instance_use_availability_zones ? each.value.availability_zones : null #TODO Add support for availability zones
+  availability_zones = var.container_instance_use_availability_zones ? each.value.availability_zones : null
   user_assigned_managed_identity_id = var.user_assigned_managed_identity_id
   container_registry_login_server   = local.container_registry_login_server
   container_instance_workspace_id   = var.container_instance_workspace_id
