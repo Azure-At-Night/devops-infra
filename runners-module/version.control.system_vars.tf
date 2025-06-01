@@ -9,17 +9,6 @@ variable "version_control_system_personal_access_token" {
   sensitive   = true
 }
 
-variable "version_control_system_type" {
-  type        = string
-  description = "The type of the version control system to deploy the agents too. Allowed values are 'azuredevops' or 'github'"
-  nullable    = false
-
-  # validation {
-  #   condition     = contains(local.valid_version_control_systems, var.version_control_system_type)
-  #   error_message = "cicd_system must be one of 'azuredevops' or 'github'"
-  # }
-}
-
 variable "github_organization_name" {
   type        = string
   default     = null

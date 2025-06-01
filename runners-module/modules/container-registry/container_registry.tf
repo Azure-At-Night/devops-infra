@@ -10,7 +10,7 @@ resource "azurerm_container_registry" "this" {
   network_rule_bypass_option    = var.network_rule_bypass_option
   public_network_access_enabled = var.public_network_access_enabled
   quarantine_policy_enabled     = var.quarantine_policy_enabled
-  retention_policy_in_days      = var.retention_policy_in_days
+  retention_policy_in_days      = var.container_registry_sku == "Premium" ? var.retention_policy_in_days : null
   tags                          = var.tags
   trust_policy_enabled          = var.enable_trust_policy
   zone_redundancy_enabled       = var.zone_redundancy_enabled

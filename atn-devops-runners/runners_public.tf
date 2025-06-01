@@ -6,7 +6,8 @@ module "custom_runner_public" {
   location            = module.primary_location.name
 
   container_registry_name       = "acrorbrnr002"
-  container_registry_sku        = "Premium"
+  container_registry_sku        = "Basic"
+  zone_redundancy_enabled    = false
   public_network_access_enabled = true
   network_rule_bypass_option    = "AzureServices"
   container_registry_diagnostic_settings = {
@@ -39,7 +40,6 @@ module "custom_runner_public" {
   container_instance_workspace_id  = var.workspace_id
   container_instance_workspace_key = var.workspace_key
 
-  version_control_system_type                  = "github"
   version_control_system_personal_access_token = var.github_runners_personal_access_token
   version_control_system_organization          = var.github_organization_name
   version_control_system_repository            = var.github_repository_name
