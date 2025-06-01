@@ -1,7 +1,7 @@
 terraform {
   required_version = ">= 1.9"
 
-  backend "azurerm" {}
+  backend "local" {}
 
   required_providers {
     azapi = {
