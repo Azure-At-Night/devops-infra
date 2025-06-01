@@ -3,11 +3,6 @@ variable "container_image" {
   description = "Image of the container"
 }
 
-# variable "container_name" {
-#   type        = string
-#   description = "Name of the container"
-# }
-
 variable "container_registry_login_server" {
   type        = string
   description = "Login server of the container registry"
@@ -132,6 +127,7 @@ variable "container_instance_name" {
 
 locals {
   container_instance_name = var.container_instance_name
+  container_registry_login_server = var.container_registry_login_server != null ? var.container_registry_login_server : "${var.container_registry_name}.azurecr.io"
 
   container_instances = {
     for instance in range(0, var.container_instance_count) : instance => {
@@ -157,9 +153,9 @@ module "container_instance" {
   sensitive_environment_variables   = var.sensitive_environment_variables
   use_private_networking           = var.use_private_networking
   subnet_id            = try(var.subnet_id, null)
-  #availability_zones                = var.container_instance_use_availability_zones ? each.value.availability_zones : null
+  #availability_zones                = var.container_instance_use_availability_zones ? each.value.availability_zones : null #TODO Add support for availability zones
   user_assigned_managed_identity_id = var.user_assigned_managed_identity_id
-  container_registry_login_server = var.container_registry_login_server
+  container_registry_login_server = local.container_registry_login_server
   container_instance_workspace_id = var.container_instance_workspace_id
   container_instance_workspace_key = var.container_instance_workspace_key
 
