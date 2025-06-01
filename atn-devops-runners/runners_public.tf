@@ -27,6 +27,7 @@ module "custom_runner_public" {
 
   container_instance_count                    = 2
   container_instance_name                     = "ci-orb-rnr-002"
+  container_instance_use_availability_zones = true
   user_assigned_managed_identity_id           = azurerm_user_assigned_identity.id["id_002"].id
   user_assigned_managed_identity_principal_id = azurerm_user_assigned_identity.id["id_002"].principal_id
   use_private_networking                      = false
