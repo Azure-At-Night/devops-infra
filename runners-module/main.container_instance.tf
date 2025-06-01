@@ -1,6 +1,8 @@
 variable "container_image" {
   type        = string
   description = "Image of the container"
+  default     = null
+  nullable    = true
 }
 
 variable "container_registry_login_server" {
@@ -126,12 +128,11 @@ variable "container_instance_name" {
 }
 
 locals {
-  container_instance_name         = var.container_instance_name
   container_registry_login_server = var.container_registry_login_server != null ? var.container_registry_login_server : "${var.container_registry_name}.azurecr.io"
-
+  container_image = var.container_image != null ? var.container_image : values(var.custom_container_registry_images)[0].image_names[0]
   container_instances = {
     for instance in range(0, var.container_instance_count) : instance => {
-      name               = "${local.container_instance_name}-${instance + 1}"
+      name               = "${var.container_instance_name}-${instance + 1}"
       availability_zones = [(instance % 3) + 1]
     }
   }
@@ -145,7 +146,7 @@ module "container_instance" {
   resource_group_name     = var.resource_group_name
   container_instance_name = each.value.name
   container_name          = var.container_instance_name
-  container_image         = var.container_image
+  container_image         = local.container_image
   environment_variables = merge(
     var.environment_variables,
     {
