@@ -135,7 +135,7 @@ variable "container_instance_use_availability_zones" {
 
 locals {
   container_registry_login_server = var.container_registry_login_server != null ? var.container_registry_login_server : "${var.container_registry_name}.azurecr.io"
-  container_image = var.container_image != null ? var.container_image : values(var.custom_container_registry_images)[0].image_names[0]
+  container_image                 = var.container_image != null ? var.container_image : values(var.custom_container_registry_images)[0].image_names[0]
   container_instances = {
     for instance in range(0, var.container_instance_count) : instance => {
       name               = "${var.container_instance_name}-${instance + 1}"
@@ -159,10 +159,10 @@ module "container_instance" {
       "GH_RUNNER_NAME" = each.value.name
     }
   )
-  sensitive_environment_variables = var.sensitive_environment_variables
-  use_private_networking          = var.use_private_networking
-  subnet_id                       = try(var.subnet_id, null)
-  availability_zones = var.container_instance_use_availability_zones ? each.value.availability_zones : null
+  sensitive_environment_variables   = var.sensitive_environment_variables
+  use_private_networking            = var.use_private_networking
+  subnet_id                         = try(var.subnet_id, null)
+  availability_zones                = var.container_instance_use_availability_zones ? each.value.availability_zones : null
   user_assigned_managed_identity_id = var.user_assigned_managed_identity_id
   container_registry_login_server   = local.container_registry_login_server
   container_instance_workspace_id   = var.container_instance_workspace_id
