@@ -36,3 +36,14 @@ variable "enable_telemetry" {
   type        = bool
   default     = false
 }
+
+variable "workspace_id" {
+  description = "Repository name."
+  type        = string
+  sensitive   = false
+}
+variable "workspace_key" {
+  description = "Workspace key."
+  type        = string
+  sensitive   = true
+}
