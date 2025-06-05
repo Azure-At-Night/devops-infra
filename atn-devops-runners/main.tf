@@ -31,10 +31,10 @@ module "rg" {
 #region Log Analytcis Workspace
 module "log" {
   for_each = local.log_analytics
- 
+
   source  = "Azure/avm-res-operationalinsights-workspace/azurerm"
   version = "0.4.2"
- 
+
   name                                               = each.value.name
   location                                           = try(each.value.location, module.primary_location.name)
   resource_group_name                                = each.value.resource_group_name

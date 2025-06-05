@@ -32,8 +32,8 @@ module "custom_runner_public" {
   user_assigned_managed_identity_principal_id = azurerm_user_assigned_identity.id["id_002"].principal_id
   use_private_networking                      = false
   environment_variables = {
-    GH_RUNNER_URL = "https://github.com/Azure-At-Night"
-    GH_RUNNER_LABELS = "atn,public,azure"
+    GH_RUNNER_URL           = "https://github.com/Azure-At-Night"
+    GH_RUNNER_LABELS        = "atn,public,azure"
     GH_RUNNER_TOKEN_API_URL = "https://api.github.com/orgs/Azure-At-Night/actions/runners/registration-token"
   }
   sensitive_environment_variables = {
