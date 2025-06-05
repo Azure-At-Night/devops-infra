@@ -7,12 +7,12 @@ module "naming" {
 }
 #endregion Naming
 
-#region Lcocation
+#region Location
 module "primary_location" {
   source  = "azurerm/locations/azure"
   version = "0.2.4"
 
-  location = local.primary_location
+  location = local.locations["primary_location"]
 }
 #endregion Lcocation
 
@@ -27,6 +27,22 @@ module "rg" {
   location = try(each.value.location, module.primary_location.name)
 }
 #endregion Resource Group
+
+#region Log Analytcis Workspace
+module "log" {
+  for_each = local.log_analytics
+ 
+  source  = "Azure/avm-res-operationalinsights-workspace/azurerm"
+  version = "0.4.2"
+ 
+  name                                               = each.value.name
+  location                                           = try(each.value.location, module.primary_location.name)
+  resource_group_name                                = each.value.resource_group_name
+  enable_telemetry                                   = false
+  log_analytics_workspace_internet_ingestion_enabled = try(each.value.internet_ingestion_enabled, true)
+  log_analytics_workspace_internet_query_enabled     = try(each.value.internet_query_enabled, true)
+}
+#endregion Log Analytics Workspace
 
 #region Identities and RBAC
 resource "azurerm_user_assigned_identity" "id" {

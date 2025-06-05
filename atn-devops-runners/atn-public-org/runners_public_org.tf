@@ -1,4 +1,4 @@
-#region Custom module - Public Runners
+#region Custom module - Public Runners GitHub organization scope
 module "custom_runner_public" {
   source = "../runners-module"
 
@@ -6,7 +6,8 @@ module "custom_runner_public" {
   location            = module.primary_location.name
 
   container_registry_name       = "acrorbrnr002"
-  container_registry_sku        = "Premium"
+  container_registry_sku        = "Basic"
+  zone_redundancy_enabled       = false
   public_network_access_enabled = true
   network_rule_bypass_option    = "AzureServices"
   container_registry_diagnostic_settings = {
@@ -18,30 +19,27 @@ module "custom_runner_public" {
     avm_img = {
       task_name            = "github-container-instance-image-build-task"
       dockerfile_path      = "dockerfile"
-      context_path         = "https://github.com/filipvagner/github-runner-aci#63f4d76:github-runner-aci"
+      context_path         = "https://github.com/filipvagner/github-runner-aci#a0fe69a:github-runner-aci"
       context_access_token = "a"
-      image_names          = ["github-runner:63f4d76"]
+      image_names          = ["github-runner:a0fe69a"]
     }
   }
 
   container_instance_count                    = 1
-  container_instance_name           = "ci-orb-rnr-002"
-  container_registry_login_server             = "acrorbrnr002.azurecr.io" #FIXME this has to be handled within module
-  container_image                             = "github-runner:63f4d76"   #FIXME this has to be handled within module
+  container_instance_name                     = "ci-orb-rnr-002"
+  container_instance_use_availability_zones   = true
   user_assigned_managed_identity_id           = azurerm_user_assigned_identity.id["id_002"].id
   user_assigned_managed_identity_principal_id = azurerm_user_assigned_identity.id["id_002"].principal_id
   use_private_networking                      = false
-  github_organization_name                    = var.github_organization_name
-  github_repository_name                      = var.github_repository_name
+  environment_variables = {
+    GH_RUNNER_URL = "https://github.com/Azure-At-Night"
+    GH_RUNNER_LABELS = "atn,public,azure"
+    GH_RUNNER_TOKEN_API_URL = "https://api.github.com/orgs/Azure-At-Night/actions/runners/registration-token"
+  }
   sensitive_environment_variables = {
     GH_RUNNER_TOKEN = var.github_runners_personal_access_token
   }
   container_instance_workspace_id  = var.workspace_id
   container_instance_workspace_key = var.workspace_key
-
-  version_control_system_type                  = "github"
-  version_control_system_personal_access_token = var.github_runners_personal_access_token
-  version_control_system_organization          = var.github_organization_name
-  version_control_system_repository            = var.github_repository_name
 }
-#endregion Custom module - Public Runners
+#endregion Custom module - Public Runners GitHub organization scope
