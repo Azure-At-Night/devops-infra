@@ -1,5 +1,8 @@
 name: Test Pipeline on Public Runner
 
+permissions:
+  contents: read # Default to read-only for contents
+
 on:
   workflow_dispatch:
 
