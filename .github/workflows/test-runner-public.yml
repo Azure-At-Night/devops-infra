@@ -5,13 +5,13 @@ on:
 
 jobs:
   print-hello-world:
-    runs-on: [self-hosted, atn, azure, public]
+    runs-on: [ubuntu-latest]
     steps:
       - name: Print Hello World
         run: echo "Hello, World!"
 
   list-local-files:
-    runs-on: [self-hosted, atn, azure, public]
+    runs-on: [ubuntu-latest]
     steps:
       - name: List Local Files
         run: ls -la
