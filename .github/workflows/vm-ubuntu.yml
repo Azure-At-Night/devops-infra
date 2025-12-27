@@ -1,0 +1,23 @@
+name: Test Pipeline on vm-ubuntu Runner
+
+permissions:
+  contents: read # Default to read-only for contents
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print-hello-world:
+    runs-on: [self-hosted, vm-ubuntu]
+    steps:
+      - name: Print Hello World
+        run: echo "Hello, World!"
+
+  list-local-files:
+    runs-on: [self-hosted]
+    steps:
+      - name: List Local Files
+        run: ls -la
+      
+      - name: Working Directory
+        run: pwd
