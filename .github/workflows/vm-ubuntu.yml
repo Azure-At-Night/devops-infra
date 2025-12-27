@@ -1,8 +1,5 @@
 name: Test Pipeline on vm-ubuntu Runner
 
-permissions:
-  contents: read # Default to read-only for contents
-
 on:
   workflow_dispatch:
 
@@ -14,7 +11,7 @@ jobs:
         run: echo "Hello, World!"
 
   list-local-files:
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, vm-ubuntu]
     steps:
       - name: List Local Files
         run: ls -la
